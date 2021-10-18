@@ -36,7 +36,7 @@ impl PomoMachine {
         #[cfg(not(debug_assertions))]
         let mut resource_dir: PathBuf = "./res".into();
 
-        resource_dir.push("hellnaw.wav");
+        resource_dir.push("hellnaw.ogg");
 
         let file = BufReader::new(File::open(resource_dir).unwrap());
         let source = Decoder::new(file).unwrap();
