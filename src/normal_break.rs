@@ -1,6 +1,7 @@
-use std::thread;
 use std::time;
+use std::time::Instant;
 
+use crate::alarm;
 use crate::work::Work;
 use crate::PomoState;
 
@@ -21,7 +22,7 @@ impl PomoState<Break> {
             self.global.num_of_work,
             self.global.total_work - 1
         );
-        thread::sleep(self.state.duration);
+        alarm(Instant::now(), self.state.duration);
     }
 }
 

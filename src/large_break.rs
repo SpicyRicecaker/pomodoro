@@ -1,8 +1,9 @@
 use std::time;
-use std::thread;
+use std::time::Instant;
 
 use crate::Global;
 use crate::PomoState;
+use crate::alarm;
 use crate::work::Work;
 
 pub struct LargeBreak {
@@ -18,7 +19,7 @@ impl LargeBreak {
 impl PomoState<LargeBreak> {
     pub fn tick(&mut self) {
         println!("Large Break, START!",);
-        thread::sleep(self.state.duration);
+        alarm(Instant::now(), self.state.duration);
     }
 }
 

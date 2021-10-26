@@ -2,22 +2,26 @@ use std::{
     fs::File,
     io::{BufReader, Read},
     path::{Path, PathBuf},
-    time,
+    thread,
+    time::{self, Duration, Instant},
 };
 
 use large_break::LargeBreak;
 use normal_break::Break;
+use pause::Pause;
 use rodio::{Decoder, OutputStream, Sink};
 use work::Work;
 
 pub mod large_break;
 pub mod normal_break;
 pub mod work;
+pub mod pause;
 
 pub enum PomoMachine {
     Work(PomoState<Work>),
     Break(PomoState<Break>),
     LargeBreak(PomoState<LargeBreak>),
+    Pause(PomoState<Pause>)
 }
 impl PomoMachine {
     pub fn tick(&mut self) {
@@ -25,6 +29,7 @@ impl PomoMachine {
             PomoMachine::Work(r) => r.tick(),
             PomoMachine::Break(r) => r.tick(),
             PomoMachine::LargeBreak(r) => r.tick(),
+            PomoMachine::Pause(r) => r.tick(),
         }
     }
     pub fn step(self) -> Self {
@@ -102,5 +107,25 @@ impl<T> PomoState<T> {
             },
             state: Work::new(work_time),
         }
+    }
+}
+
+fn paused() {
+
+}
+
+/// displays current time elapsed, as well as enables option for user to pause
+/// recursive call
+fn alarm(start: Instant, total: Duration) {
+    let mut t = String::new();
+    std::io::stdin().read_line(&mut t).unwrap();
+    if t.trim() == "p" {
+        // request state change to p??? but how?
+    }
+
+    thread::sleep(Duration::from_millis(1000));
+
+    if start.elapsed() < total {
+        alarm(start, total);
     }
 }
